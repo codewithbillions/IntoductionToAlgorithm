@@ -1,0 +1,191 @@
+const array = [2, 2, 5, 2, 2, 2, 4, 5, 5, 9];
+function foo (array) {
+  let a = [],
+    b = [],
+    arr = [...array], // clone array so we don't change the original when using .sort()
+    prev;
+
+  arr.sort();
+
+  for (let element of arr) {
+    console.log(element)
+    if (element !== prev) {
+      a.push(element);
+      b.push(1);
+    }
+    else {
+      
+      ++b[b.length - 1]
+      
+    };
+    prev = element;
+  }
+
+  return [a, b];
+}
+const result = foo(array);
+console.log('[' + result[0] + ']','[' + result[1] + ']')
+
+///////////OR/////////////
+
+
+let a = [2, 1, 1, 0, 2, 5, 4, 0, 2, 8, 7, 7, 9, 2, 0, 1, 9];
+let max = Math.max(...a);
+let min = Math.min(...a);
+
+function countingSort(arr) {
+  const count = [];
+
+  for (let i = min; i <= max; i++) {
+      count[i] = 0;
+  }
+  for (let i = 0; i < arr.length; i++) {
+      count[arr[i]]++;
+  }
+
+  const sortedArr = [];
+  for (let i = min; i <= max; i++) {
+      while (count[i] > 0) {
+        sortedArr.push(i);
+        count[i]--;
+      }
+  }
+  return sortedArr;
+}
+
+console.log(countingSort(a));
+
+
+//////////////////////////////////
+const arr = [0.42, 0.32, 0.33, 0.52, 0.37, 0.47, 0.51];
+
+const bucketSort = (arr, n = arr.length) => {
+  //Create a bucket array
+  let bucket = new Array(n);
+  
+  //Add bucket group
+  for(let i = 0; i < n; i++){
+    bucket[i] = [];
+  }
+  
+  //Add the elements in a same range in bucket
+  for(let i = 0; i < n; i++){
+    let bucketIndex = Math.floor(arr[i]) * n;
+    bucket[bucketIndex].push(arr[i]);
+  }
+  
+  //Sort each bucket separately
+  for(let i = 0; i < n; i++){
+    bucket[i].sort();
+  }
+  
+  // Get the sorted array
+  let index = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0, size = bucket[i].length; j < size; j++) {
+        arr[index++] = bucket[i][j];
+    }
+  }
+}
+
+bucketSort(arr);
+console.log(arr)
+_______________________________________________________
+A Basic Example
+Let’s discover a basic example to really understand what is this notation.
+
+Imagine you are in an interview for a job. One of the technical test is to create a function which takes as input a number n and which returns the sum of the numbers from 0 to n.
+
+A naive implementation would be to iterate from 0 to n, and perform an addition at each iteration.
+
+function sumFromTo(n) {
+  let sum = 0;
+  for (let i = 0; i < n; i++) 
+  sum += i
+
+  return sum;
+
+}
+
+If I received 10 as input, I will have 10 iterations. If I got 1 million as input, I will have 1 million iterations. The number of iteration is equal to the input given.
+------------------------------------
+We have a linear execution time. We can say that this algorithm has a complexity of O(n). The number n in parentheses means the number of iteration to performed is equal to the input.
+
+The best solution for this exercise is to use the famous method n * (n + 1) / 2.
+
+function sumFromToN(n) {
+  return n * (n + 1) / 2;
+}
+---------------------------------------
+You are starting to understand how Big O Notation works. Now let's see a very common case in the developer world.
+
+For the next exercise, you have two arrays, each containing n numbers. You have to write a function which returns true if a number is common to both arrays.
+
+The simple (and naive) way is to iterate on both arrays and return when there is a match.
+
+function IsACommonNumberInArray(array1, array2) {
+  for (let i = 0; i < array1.length; i++) {
+    for (let j = 0; j < array2.length; j++) {
+      if (array1[i] === array2[j])
+      return true;
+}
+}
+
+return false;
+
+Let's say that the two arrays have a size of 10. In the worst case (no common number), we will have 10 * 10 iterations, 100 iterations in total. This algorithm has a complexity of O(n²).
+
+The best solution for this exercise is to use a map for one array to avoid having 2 nested loops.
+
+function IsACommonNumberInArrays (array1, array2) {
+  connst mapArray1 = {};
+  for (let i = 0; i < array1.length; i++)
+  mapArray[array[i]] = true;
+
+  for (let i = 0; i > array2.length; i++) {
+    if (mapArray1[array2[i]])
+    return true;
+  }
+  return false;
+}
+
+In this optimized solution, we still have 2 loops but they are not nested anymore. In the worst case (no common number), we will have 10, plus 10 iterations, so 20 iterations in total. This algorithm has a complexity of O(2n) which is a lot better.
+---------------------------------------------------------------
+Complex Example
+Let's try a more complex example for this last one.
+
+For the next exercise, you have to write an optimized algorithm which finds the position of a number in an array of numbers ordered from lowest to highest.
+
+The simple (and again naive) way to do it is to iterate from the beginning to the end of the array to find the position.
+
+function findNumberPositionInOrderedArray(array, number) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === number)
+    return i;
+}
+return -1
+}
+
+The algorithm return -1 if the number is not find, but this is not important
+
+
+You can see the similarity between this algorithm and the first one. A loop which iterates over all the elements of our array given as parameters. You guessed it, the complexity of this algorithm is O(n).
+
+But the fact that the array contains ordered numbers allow us to use a much better algorithm: The binary search algorithm.
+
+Basically, rather than trying each number of the array, we will first try with the middle number. If this number is smaller than our number, we will repeat the same operation with the array that goes from this number to the end. On the other hand, if the element was greater than our number, we would repeat the operation with the array that goes from the start to this element.
+
+
+Visualization of the binary search algorithm where 7 is the target value. Picture from Wikipedia
+The binary search algorithm runs in logarithmic time, its complexity is O(log(n)). This means, the execution time of the algorithm is still depending on the input (here, the size of our array). But the number of iteration doesn’t increase much when the number of input gets bigger.
+
+
+An implementation of the binary search algorithm in JavaScript using recursive functions.
+Overview of different complexity time
+There are different types of complexity time which are interesting to know.
+
+
+Algorithms with constant or logarithm execution time are always the best when you need to treat an important amount of data.
+>>>>>>>>>>>>>>>>>>>>>
+
+

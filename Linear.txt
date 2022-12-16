@@ -1,0 +1,205 @@
+/**
+ * Interval is defined as [start, end]- the start of an
+ * interval to the end of the interval. Given a list of
+ * Intervals. Your task is to check if any two intervals
+ * overlap.
+ *
+ * Example:
+ *
+ * Input: [[1,3],[2,4]]
+ * Output: false
+ *
+ * Input: [[1,3],[2,4],[5,7]]
+ * Output: true
+ *
+ * @param {Array} intervals
+ * @return {Boolean}
+ */
+
+function isOverlapping(intervals) {
+  const sorted = intervals.sort((a, b) => a[0] - b[0]);
+  let i = 0;
+  while (i < sorted.length - 1) {
+    const current = sorted[i];
+    const next = sorted[i + 1];
+    if (current[1] >= next[0]) {
+      return true;
+    }
+    i++;
+  }
+  return false;
+}
+
+
+function isOverlapping2(intervals) {
+  // [[1,5], [6,10], [12,15], [3,7]]
+  // Method 1
+  // Create a new array to hold the numbers for all the intervals
+  // Loop though each interval and add the numbers in each interval to our new array
+  // Check. If any number occurs twice, then we have an overlapping interval
+
+  // Method 2
+  // Create a new array to hold the numbers for all the intervals
+  // Loop through each interval to add its numbers to the array.
+  // But check first, if the number is not in the array already, add it
+  // If the number is in the array already, we have overlapping intervals
+
+  // Method 3
+
+  // Arrange the intervals in ascending order using their start values:
+  // [[1,5], [3,7], [6,10], [12,15]]
+  const intervalCopy = [...intervals]; // intervals.map(a => a) or Array.from(intervals)
+  const sortedIntervals = intervalCopy.sort((a, b) => a[0] - b[0]);
+
+  // For each interval,
+  for (let i in sortedIntervals) {
+    // check if its end value falls between any interval
+    let endVal = sortedIntervals[i][1];
+    let copyInterval = [...sortedIntervals];
+    copyInterval.splice(i, 1);
+
+    if (copyInterval.find((rI) => endVal >= rI[0] && endVal <= rI[1]))
+      return true;
+  }
+  return false;
+}
+
+/**
+ * Given a string, write an algorithm to find the longest
+ * substring formed from at least K characters.
+ */
+
+/**
+ * Given an array of positive and negative integers, write
+ * an algorithm to find the two elements such their sum is
+ * closest to zero.
+ *
+ * Example:
+ *
+ * Input: [-1, 2, 1, -4]
+ * Output: 1, -1
+ *
+ * @param {Array} arr
+ * @return {Array}
+ */
+ 
+function sumClosestToZero(arr) {
+  let leastSum = Number.MAX_SAFE_INTEGER; (This returns a number closer to 1 and -1)
+  let nums = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      const sum = arr[i] + arr[j];
+      // Check if new sum is closer to zero than old sum
+      if (Math.abs(sum) < Math.abs(leastSum)) {
+        leastSum = sum;
+        nums[0] = arr[i];
+        nums[1] = arr[j];
+      }
+    }
+  }
+
+  return [leastSum, nums];
+}
+
+console.log(sumClosestToZero([1, 4, -5, 3, -2, 10, -6, 20]))
+
+/**
+ * Given an Infix expression, write an algorithm to convert
+ * it into Postfix expression.
+ *
+ * Example:
+ *
+ * Input: a+b*(c^d-e)^(f+g*h)-i
+ * Output: abcd^e-fgh*+^*+i-
+ *
+ * @param {String} str
+ * @return {String}
+ */
+
+// Use this one //
+Given an Infix expression, write an algorithm to convert it into Postfix expression.
+
+function infixToPostfix(str) {
+  const stack = [];
+  const output = [];
+  const operators = {
+    "+": 1,
+    "-": 1,
+    "*": 2,
+    "/": 2,
+    "^": 3,
+  };
+
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    if (char === "(") {
+      stack.push(char);
+    } else if (char === ")") {
+      while (stack.length > 0 && stack[stack.length - 1] !== "(") {
+        output.push(stack.pop());
+      }
+      stack.pop();
+    } else if (char in operators) {
+      while (
+        stack.length > 0 &&
+        operators[stack[stack.length - 1]] >= operators[char]
+      ) {
+        output.push(stack.pop());
+      }
+      stack.push(char);
+    } else {
+      output.push(char);
+    }
+  }
+  while (stack.length > 0) {
+    output.push(stack.pop());
+  }
+  return output.join("");
+}
+
+/**
+ * Algorithm 
+1. Scan the infix expression from left to right. 
+2. If the scanned character is an operand, output it. 
+3. Else, 
+      1 If the precedence of the scanned operator is greater than the precedence of the operator in the stack(or the stack is empty or the stack contains a ‘(‘ ), push it. 
+      2 Else, Pop all the operators from the stack which are greater than or equal to in precedence than that of the scanned operator. After doing that Push the scanned operator to the stack. (If you encounter parenthesis while popping then stop there and push the scanned operator in the stack.) 
+4. If the scanned character is an ‘(‘, push it to the stack. 
+5. If the scanned character is an ‘)’, pop the stack and output it until a ‘(‘ is encountered, and discard both the parenthesis. 
+6. Repeat steps 2-6 until infix expression is scanned. 
+7. Print the output 
+8. Pop and output from the stack until it is not empty.
+ */
+function infixToPostFix2(infix) {
+  let postfix = "";
+  let stack = [];
+
+  // Scan the infix expression from left to right
+  for (let char of infix) {
+    // Check if scanned character is an operand
+    let operators = {
+      "+": 1,
+      "-": 1,
+      "*": 2,
+      "/": 2,
+      "^": 3,
+    };
+
+    if (!Object.keys(operators).includes(char)) {
+      postfix += char;
+    } else {
+      if (
+        stack.length === 0 ||
+        operators[char] > stack[stack.length - 1] ||
+        stack.includes("(")
+      ) {
+        stack.push(char);
+      } else {
+      }
+    }
+  }
+  return postfix;
+}
+
+console.log(infixToPostFix2("A+B"))

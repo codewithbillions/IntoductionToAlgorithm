@@ -1,0 +1,192 @@
+write a function that add two digits of a given positive integer of length two.
+
+function circularPermutation(x, y, z) {
+  // Assign y to a temporary variable
+  const temp = y;
+
+  // Start permutation
+  y = z; // Assign z to y
+  z = x; // Assign x to z
+  x = temp; // Assign y stored in temp value to x
+
+  // Return all 3 permutated values
+  return [x, y, z];
+}
+// circularPermutation(10, 20, 34);
+
+function carRental(kms, days) {
+  // kms is total number of km
+  // day is the total number of days at the location
+
+  // Constants from the algorithm
+  const r1 = 0.7; // rate for 0 - 100 kilometers
+  const r2 = 0.4; // rate for 101 - 1000 kilometers
+  const r3 = 0.2; // rate for 1001 and above kilometers
+  const p_d = 100; // rate per day
+  const ins = 0.3; // insurance price
+  const VAT = 0.18; // VAT
+
+  /**
+   * ALGORITHM
+   * 1. Calculate price for total days
+   * 2. Calculate price per km
+   * 3. Compare both
+   * 4. Return the one with cheaper price
+   */
+  let betterModel = "";
+  const totalDays = p_d * days;
+
+  // Calculate price for kilometer model
+  if (kms <= 100) {
+    totalKms = 0.7 * kms;
+  } else if (kms > 100 && kms <= 1000) {
+    totalKms = 0.7 * 100 + 0.4 * (kms - 100);
+  } else {
+    totalKms = 0.7 * 100 + 0.4 * 900 + 0.2 * (kms - 1000);
+  }
+
+
+  //  Compare both values
+  if (totalKms > totalDays) {
+    betterModel = "per day";
+  } else {
+    betterModel = "per km";
+  }
+  return [`The better model is ${betterModel}`, { totalDays, totalKms }];
+}
+// console.log(carRental(1000, 5));
+
+
+function dateConverter(dateString) {
+  // Define variables to return
+  let dd, mm, yy;
+
+  // Check if string is valid, i.e if it is of length 6 and contains only numbers
+  if (dateString.length !== 6 || Number(dateString) === NaN)
+    return "Enter a valid dateString";
+
+  // Split the number into 3 sets of 2 digits
+  const day = dateString.slice(0, 2); // everything greater than or equal to 0, but less than 2
+  const month = dateString.slice(2, 4); // everything greater than or equal to 2, but less than 4
+  const year = dateString.slice(4, 6); // everything greater than or equal to 4, but less than 6
+
+  // Check if day, month and year are valid
+  // First convert day, month and year to numbers
+  let dayNum = Number(day);
+  let monthNum = +month;
+  let yearNum = +year;
+
+  // Check if day is invalid, i.e it falls outside 1 - 31
+  if (dayNum < 1 || dayNum > 31) {
+    return "Day is invalid";
+  } else {
+    dd = day;
+  }
+
+  // Check if month is invalid, i.e it falls outside 1 - 12
+    // Define months variable
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (monthNum < 1 || monthNum > 12) {
+        return "Month is invalid";
+    } else {
+        mm = months[monthNum - 1];
+    }
+
+  // Check if year is invalid, i.e it falls outside current year
+  const d = new Date(); // date object
+  const curYY = d.getFullYear(); // get current year
+  // Convert curYY to string & get last 2 digits and convert it back to a number
+  const curYYStr = curYY + "";
+  const curYY2 = curYYStr.slice(2);
+  const curYY2Num = +curYY2;
+
+  if (yearNum < curYY2Num) {
+    yy = "20" + yearNum;
+  } else {
+    yy = "19" + yearNum;
+  }
+
+  return `Day: ${dd}, Month: ${mm}, Year: ${yy}`;
+}
+// dateConverter("080456");
+
+
+/**
+ * Write a function to check if a string is a valid mathematical expression
+ * 
+ * Rules:
+ * 1. The string can contain only numbers and the following special characters: +, -, *, /, (, )
+ * 2. The string ends with a #.
+ * 3. An opening bracket cannot occur between an opening and closing bracket
+ * 4. A closing bracket cannot occur between a closing and opening bracket
+ * 
+ * @param {string} str
+ * @returns {boolean}
+
+ */
+function isValidMathExpression(str) {
+    // Stack for checking rule 3
+    const stack = [];
+
+    // Check for rule 2
+    if(str.slice(-1) !== "#") return false;
+
+    // Loop through remaining string after removing hash
+    let newStr = str.slice(0, -1);
+    for(let i = 0; i < newStr.length; i++) {
+        // Check for rule 1
+            // Check if each character is a number
+            if(!newStr[i].match(/^\d+$/)){
+                // Check if it is any other valid character
+                // Define other valid characters
+                const otherValidChars = ["+", "-", "*", "/", "(", ")"];
+                // If still not a valid character, return false.
+                if(!otherValidChars.includes(newStr[i])) return false;
+            }
+        
+        // Check for rule 3
+        if(newStr[i] === "(") stack.push(newStr[i]);
+        if(newStr[i] === ")") {
+            // Check if stack is empty
+            if(stack.length === 0) return false;
+            // Check if stack is not empty
+            // If it is not empty, remove the last element, which will be a "("
+            stack.pop();
+        }
+    }
+    if(stack.length > 0) return false;
+
+    return true;
+}
+isValidMathExpression("6+((())8+(9)#");
+
+
+javascript variable exercise
+write a code that switched the values around
+
+var a = "5";
+var b = "8";
+so that the variable a holds the value 8
+and variable b hold the value 5
+
+aim :
+when th code is run: the output:
+a is 8
+b is 3
+
+do not change any of the existing code
+you are not allowed to type any numbers
+you should not redeclare variable a and b.
+
+function test() {
+	var a = "5"
+	var b = "8"
+/****** Do Not Change The Code Above******/
+// Write your code below
+
+
+
+//***** Do not change the code below ****/
+
+console.log("a is " + a)
+console.log("b is " + b)
